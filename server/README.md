@@ -1,21 +1,21 @@
-# FrameForge server
+## Backend notes (updated)
 
-This is a minimal Express backend used by the FrameForge frontend for local development and prototype workflows.
+Auth
+- POST /api/auth/signup { email, password } -> { token }
+- POST /api/auth/login { email, password } -> { token }
 
-Features:
-- POST /api/generate — create a simulated generation job (returns jobId)
-- GET /api/jobs/:id — check job status and result
-- GET /api/recent — list recent jobs
-- POST /api/projects — save a small project record
-- GET /api/projects — list saved projects
+Protected endpoints
+- POST /api/projects -> requires Authorization: Bearer <token>
 
-Quick start
+Dev
+- server uses simple file-based persistence (server/db.json and server/users.json)
+- To run locally:
+  cd server
+  npm install
+  npm run dev
 
-1. cd server
-2. npm install
-3. npm run dev   # requires nodemon (dev)
-4. npm start     # production
-
-Notes
-
-This server uses a simple JSON file at `server/db.json` to persist jobs and projects. It is intended as a lightweight mock service for development. Replace the job simulation with real background jobs and storage when integrating a real AI generation provider.
+Next steps to production
+- Replace file-based storage with a Postgres DB (DATABASE_URL)
+- Use a managed auth provider (Supabase, Clerk) for easier production auth
+- Replace job simulation with a real job queue and AI integration (worker)
+- Store generated assets in S3 and return signed URLs
